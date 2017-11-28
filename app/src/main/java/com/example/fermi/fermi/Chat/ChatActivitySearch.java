@@ -127,28 +127,8 @@ public class ChatActivitySearch extends AppCompatActivity {
             invitaionchaeck();
         }
 
-     //   mDatabase.child("users").child(login_udid).child("Conversation_person").child(uid).child("chatmegalert").setValue("No");
-
+  
         initListeners();
-
-    /*    myTimer = new Timer();
-        int delay = 0;   // delay for 30 sec.
-        int period = 3000;  // repeat every 60 sec.
-        doThis = new TimerTask() {
-            public void run() {
-                if (avaliblemeg .equals("")){
-                }
-                else {
-                    mDatabase.child("users").child(login_udid).child("Conversation_person").child(uid).setValue(new ChatModel(username,profile, uid, email,"No",avaliblemeg,"0",new Date().getTime()));
-                    mDatabase.child("users").child(uid).child("Conversation_person").child(login_udid).setValue(new ChatModel(loginperson_name,login_profile,login_udid,login_email,"yes",avaliblemeg,"1",new Date().getTime()));
-                    mDatabase.child("users").child(login_udid).child("Chat").child(uid).child("ChatList").push().setValue(new ChatMessage(avaliblemeg,"0"));
-                    mDatabase.child("users").child(uid).child("Chat").child(login_udid).child("ChatList").push().setValue(new ChatMessage(avaliblemeg,"1"));
-                    avaliblemeg="";
-                }
-            }
-        };
-
-        myTimer.scheduleAtFixedRate(doThis, delay, period);*/
 
 
         myTimer1 = new Timer();
@@ -195,15 +175,6 @@ public class ChatActivitySearch extends AppCompatActivity {
         };
 
         myTimer1.scheduleAtFixedRate(doThis1, delay1, period1);
-
-      /*  new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-
-
-
-            }
-        }, 0, 3000);*/
 
     }
     private void initComponents() {
@@ -312,17 +283,7 @@ public class ChatActivitySearch extends AppCompatActivity {
                 mDatabase.child("users").child(uid).child("Chat").child(login_udid).child("ChatList").push().setValue(new ChatMessage(avaliblemeg,"1"));
             }
         }).start();
-       /* Runnable runnable = new Runnable() {
-            public void run() {
-
-                mDatabase.child("users").child(login_udid).child("Conversation_person").child(uid).setValue(new ChatModel(username,profile, uid, email,"No",avaliblemeg,"0",new Date().getTime()));
-                mDatabase.child("users").child(uid).child("Conversation_person").child(login_udid).setValue(new ChatModel(loginperson_name,login_profile,login_udid,login_email,"yes",avaliblemeg,"1",new Date().getTime()));
-                mDatabase.child("users").child(login_udid).child("Chat").child(uid).child("ChatList").push().setValue(new ChatMessage(avaliblemeg,"0"));
-                mDatabase.child("users").child(uid).child("Chat").child(login_udid).child("ChatList").push().setValue(new ChatMessage(avaliblemeg,"1"));
-            }
-        };
-        Thread mythread = new Thread(runnable);
-        mythread.start();*/
+    
     }
     public void getDataFromServer() {
         new Thread(new Runnable() {
@@ -356,59 +317,7 @@ public class ChatActivitySearch extends AppCompatActivity {
 
     }
 
-    private void displayChatMessage() {
-
-        messagelist=(ListView)findViewById(R.id.lv_list);
-        adapter = new FirebaseListAdapter<ChatMessage>(this,ChatMessage.class,R.layout.item_chat_adapter,mDatabase.child("users").child(login_udid).child("Chat").child(uid).child("ChatList")) {
-            @Override
-            protected void populateView(View v, ChatMessage model, int position) {
-
-                TextView tvmessage,tvmessage1,time;
-                LinearLayout recevier,sender;
-                CircleImageView senderimage;
-
-                recevier = (LinearLayout) v.findViewById(R.id.receiver);
-                sender = (LinearLayout) v.findViewById(R.id.sender);
-                senderimage = (CircleImageView) v.findViewById(R.id.profile_view);
-
-                tvmessage=(TextView)v.findViewById(R.id.messageTextView);
-                tvmessage1=(TextView)v.findViewById(R.id.messageTextView1);
-                time=(TextView)v.findViewById(R.id.txt_msg_time);
-
-                //message.setText(model.getMessageText());
-                time.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",model.getMessageTime()));
-
-                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) tvmessage.getLayoutParams();
-
-                if(model.getMsgDirection().equals("1")){ //direction=0  should be displayed as messages sent from the mobile app.
-                    lp.gravity = Gravity.LEFT;
-                    recevier.setVisibility(View.GONE);
-                    sender.setVisibility(View.VISIBLE);
-                    sender.setGravity(Gravity.LEFT);
-                    Glide.with(getApplicationContext())
-                            .load(profile)
-                            .placeholder(R.drawable.profile)
-                            .into(senderimage);
-                    sender.setLayoutParams(lp);
-                    tvmessage.setText(model.getMessageText());
-                    tvmessage.setTextColor(getResources().getColor(R.color.reciver_text_msg));
-                    tvmessage.setBackground(getResources().getDrawable(R.drawable.textview_border));
-                }else if(model.getMsgDirection().equals("0")){ //direction=1  should be displayed as messages received at the mobile app
-                    lp.gravity = Gravity.RIGHT;
-                    sender.setVisibility(View.GONE);
-                    recevier.setVisibility(View.VISIBLE);
-                    recevier.setGravity(Gravity.RIGHT);
-                    recevier.setLayoutParams(lp);
-                    tvmessage1.setText(model.getMessageText());
-                    tvmessage1.setTextColor(getResources().getColor(R.color.sender_text_msg));
-                    tvmessage1.setBackground(getResources().getDrawable(R.drawable.textview_bordersender));
-                }
-            }
-        };
-
-        messagelist.setAdapter(adapter);
-
-    }
+ 
     private void invitaionchaeck(){
 
         mDatabase.child("users").child(login_udid).child("Person").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
